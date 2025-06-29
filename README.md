@@ -13,7 +13,6 @@ docker compose up -d
 - Создание нового wallet:
 ```http
 POST /api/v1/wallet/create (без тела и доп.параметров)
-Вернет json c полем uuid созданного wallet
 ```
 *Вернет json c полем uuid созданного wallet*
 
