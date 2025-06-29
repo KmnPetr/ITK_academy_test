@@ -1,0 +1,53 @@
+
+services:
+  db-itk-academy:
+    image: postgres:14.3-alpine
+    restart: always
+    container_name: db-itk-academy
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+    volumes:
+      - db-itk-academy:/var/lib/postgresql/data/
+    networks:
+      - itk-academy_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  app:
+    container_name: app
+    build: .
+    restart: always
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    environment:
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_USER=${DB_USER}
+      - DB_HOST=db-itk-academy
+      - API_PORT=${API_PORT}
+    networks:
+      - itk-academy_network
+    depends_on:
+      db-itk-academy:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${API_PORT}/api/actuator/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+
+volumes:
+  db-itk-academy:
+
+networks:
+  itk-academy_network:
+    driver: bridge

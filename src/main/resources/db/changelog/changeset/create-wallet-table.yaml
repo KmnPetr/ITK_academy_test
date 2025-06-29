@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-wallet-table
+      author: Petr
+      changes:
+        - createTable:
+            tableName: wallet
+            columns:
+              - column:
+                  name: uuid
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: balance
+                  type: numeric(19,4)
+                  constraints:
+                    nullable: false
+                  defaultValueNumeric: 0
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: version
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addDefaultValue:
+            tableName: wallet
+            columnName: uuid
+            defaultValueComputed: gen_random_uuid()
+        - addDefaultValue:
+            tableName: wallet
+            columnName: created_at
+            defaultValueComputed: CURRENT_TIMESTAMP
