@@ -15,10 +15,13 @@ docker compose up -d
 POST /api/v1/wallet/create (без тела и доп.параметров)
 Вернет json c полем uuid созданного wallet
 ```
+*Вернет json c полем uuid созданного wallet*
 
 - Операции пополнения, списания:
 ```http
 POST /api/v1/wallet
+```
+```json
 {
     valletId: UUID,
     operationType: DEPOSIT or WITHDRAW,
